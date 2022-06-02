@@ -1,6 +1,7 @@
 import Cookies from 'js-cookie';
+import { FilmInOrder } from '../pages/films/[filmId]';
 
-export function getParsedCookie(key) {
+export function getParsedCookie(key: string) {
   const cookieValue = Cookies.get(key);
 
   if (!cookieValue) {
@@ -13,6 +14,11 @@ export function getParsedCookie(key) {
   }
 }
 
-export function setStringifiedCookie(key, value) {
+type FilmInOrder = {
+  id: string;
+  filmCounter: number;
+}[];
+
+export function setStringifiedCookie(key: string, value: FilmInOrder) {
   Cookies.set(key, JSON.stringify(value));
 }

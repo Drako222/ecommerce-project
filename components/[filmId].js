@@ -3,8 +3,8 @@ import Cookies from 'js-cookie';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useState } from 'react';
-import { getParsedCookie, setStringifiedCookie } from '../../util/cookies.js';
-import { getFilm } from '../../util/filmsDatabase copy.js';
+import { getParsedCookie, setStringifiedCookie } from '../../util/cookies.ts';
+import { getFilm } from '../util/filmsDatabase.js';
 
 const filmPageStyles = css`
   h1 {
@@ -238,10 +238,11 @@ export async function getServerSideProps(context) {
   const foundFilm = await getFilm(context.query.filmId);
 
   // const foundFilm = filmsDatabase.find(
-  //   (film) => film.id === context.query.filmId.filmId,
+  //   (film) => film.id === context.query.filmId.filmId,P
   // );
 
   // 3. Find the object that represent the fruit in the url
+
   const currentFilmInOrder = currentOrder.find(
     (filmInOrder) => foundFilm.id === filmInOrder.id,
   );

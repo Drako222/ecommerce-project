@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
-import { getFilmsDatabase } from '../util/filmsDatabase copy';
+import { getFilmsDatabase } from '../util/filmsDatabase';
 
 // import Layout from '../components/Layout.js';
 
@@ -121,6 +121,7 @@ export default function Films(props) {
 
 export async function getServerSideProps() {
   const films = await getFilmsDatabase();
+
   return {
     props: {
       films: films,
