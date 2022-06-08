@@ -167,6 +167,26 @@ export default function Film(props: Props) {
               const filmCount = filmCounter - 1;
               const reducedfilmCount = Math.max(1, Math.min(100, filmCount));
               setFilmCounter(reducedfilmCount);
+
+              if (isInCart) {
+                const currentCart = Cookies.get('cart')
+                  ? getParsedCookie('cart')
+                  : [];
+
+                const cart = [...currentCart];
+                let filteredCart = cart.filter(
+                  (filmInCart) => filmInCart.id !== props.film.id,
+                );
+
+                const newCart = [
+                  ...filteredCart,
+                  {
+                    id: props.film.id,
+                    filmCounter: reducedfilmCount,
+                  },
+                ];
+                setStringifiedCookie('cart', newCart);
+              }
             }}
           >
             -
@@ -175,6 +195,35 @@ export default function Film(props: Props) {
           <button
             onClick={() => {
               setFilmCounter(filmCounter + 1);
+
+              if (isInCart) {
+                const currentCart = Cookies.get('cart')
+                  ? getParsedCookie('cart')
+                  : [];
+
+                const addition = filmCounter + 1;
+
+                const cart = [...currentCart];
+                let filteredCart = cart.filter(
+                  (filmInCart) => filmInCart.id !== props.film.id,
+                );
+
+                const newCart = [
+                  ...filteredCart,
+                  {
+                    id: props.film.id,
+                    filmCounter: addition,
+                  },
+                ];
+                setStringifiedCookie('cart', newCart);
+
+                /*    if (typeof window !== undefined) {
+                  localStorage.setItem(
+                    'cartItems',
+                    JSON.stringify(getState().filmCounter),
+                  );
+                } */
+              }
             }}
           >
             +
@@ -208,6 +257,11 @@ export default function Film(props: Props) {
                 setIsInCart(true);
               }
               setStringifiedCookie('cart', newCart);
+
+              window.localStorage.setItem(
+                'cartItems',
+                JSON.stringify(filmCounter),
+              );
             }}
           >
             {isInCart ? 'Remove from Cart' : `Add to Cart`}

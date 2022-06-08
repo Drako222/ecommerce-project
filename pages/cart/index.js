@@ -5,8 +5,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { getParsedCookie, setStringifiedCookie } from '../../util/cookies.js';
-import { getFilmsDatabase } from '../../util/filmsDatabase';
-import { totalCounting } from '../../util/functions';
+import { getFilmsDatabase } from '../../util/filmsDatabase.js';
+import { getQuantity, totalCounting } from '../../util/functions';
 
 const cartStyles = css`
   .totalprice {
@@ -37,9 +37,13 @@ export default function Cart(props) {
         <h2 data-test-id="cart-total">
           Total Price: {totalCounting(cartList)} $
         </h2>
-        <Link href="/cart/checkout" data-test-id="cart-checkout">
-          <button>Checkout</button>
-        </Link>
+        {cartList.length ? (
+          <Link href="/cart/checkout" data-test-id="cart-checkout">
+            <button>Checkout</button>
+          </Link>
+        ) : (
+          ''
+        )}
         <ul>
           {cartList.map((film) => {
             return (
@@ -90,10 +94,18 @@ export async function getServerSideProps(context) {
     };
   });
 
+  // undefined ? '' :
+
+  // if (!foundFilm) {
+  //   return {
+  //     film: null,
+  //   };
+  // }
+
   return {
     props: {
-      films,
       currentCart,
+      films,
     },
   };
 }

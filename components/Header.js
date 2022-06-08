@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import Cookies from 'js-cookie';
+import { GetServerSidePropsContext } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -59,12 +60,25 @@ const iconStyles = css`
 `;
 
 export default function Header(props) {
+  const [cart, setCart] = useState('');
+
+  // useEffect(() => {
+  //   // since we are in useEffect, that means we are in browser and window is already defined
+  //   // So you do not need to use  (typeof window !== "undefined") in useEfect
+  //   // in case you want to use somewhere else, keep in mind you have to use (typeof window !== "undefined")
+  //   // you do not just store cartitems in localstorage, you c an store all nonsensitive data in localstorage, thats why I put others too
+  //   // go any ecommerce website, add something to cart, and in browser dev tools, application tab, check localstorage. you see bunch of stored data
+  //   if (typeof window !== 'undefined') {
+  //     const cartItemsFromStorage = localStorage.getItem('cartItems')
+  //       ? JSON.parse(localStorage.getItem('cartItems'))
+  //       : [];
+  //     setCart(cartItemsFromStorage);
+  //   }
+  // });
   // const currentCart = Cookies.get('cart') ? getParsedCookie('cart') : [];
 
   // useEffect(() => {
-  //   const finalQuantity =
-  //     typeof currentCart === undefined ? '' : getQuantity(currentCart);
-  //   setQuantity(finalQuantity);
+  //
   // }, [currentCart]);
 
   // useEffect(() => {
@@ -97,7 +111,7 @@ export default function Header(props) {
             css={iconStyles}
           />
         </Link>
-        <div data-test-id="cart-count">{props.quantity}</div>
+        <div data-test-id="cart-count">{props.length}</div>
       </div>
     </header>
   );

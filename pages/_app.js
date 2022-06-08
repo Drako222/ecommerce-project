@@ -5,11 +5,8 @@ import { useEffect, useState } from 'react';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Layout from '../components/Layout';
-import { getParsedCookie } from '../util/cookies';
-import { getQuantity } from '../util/functions';
-import { getServerSideProps } from './films';
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps }, props) {
   // useEffect(() => {
   //   const currentCart = Cookies.get('cart') ? getParsedCookie('cart') : [];
   //   const finalQuantity =
@@ -50,7 +47,7 @@ function MyApp({ Component, pageProps }) {
       />
 
       <Layout>
-        <Header />
+        <Header length={props.length} />
         <Component {...pageProps} />
       </Layout>
       <Footer />
@@ -59,3 +56,17 @@ function MyApp({ Component, pageProps }) {
 }
 
 export default MyApp;
+
+export function getServerSideProps(context) {
+  const currentCart = JSON.parse(context.req.cookies.cart || '[]');
+
+  const length = currentCart.length;
+
+  const superFilm = { ...foundFilm, ...currentFilmInCart };
+
+  return {
+    props: {
+      length,
+    },
+  };
+}

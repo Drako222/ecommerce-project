@@ -22,7 +22,7 @@ const footerStyles = css`
 export default function Footer() {
   return (
     <div css={footerStyles}>
-      <div>© Meinhart Films 2022 </div>
+      <div>© EarthFlix 2022 </div>
       <a href="mailto:fritz.eierschale@example.org">Contact us</a>
     </div>
   );
