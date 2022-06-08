@@ -5,7 +5,9 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { useState } from 'react';
 import { getParsedCookie, setStringifiedCookie } from '../../util/cookies';
-import { getFilm } from '../../util/filmsDatabase.js';
+import { getReducedFilmsWithTags } from '../../util/datastructures';
+import { getFilmWithTagsById } from '../../util/filmsDatabase.js';
+import { addingOrRemovingCookies } from '../../util/functions';
 
 const filmPageStyles = css`
   h1 {
@@ -82,7 +84,7 @@ const filmPageStyles = css`
   }
 `;
 
-export type FilmInOrde = {
+export type FilmInOrder = {
   id: string;
   filmCounter: number;
 };
@@ -100,10 +102,10 @@ export type Props = {
 };
 
 export default function Film(props: Props) {
-  const [isInOrder, setIsInOrder] = useState(
+  const [isInCart, setIsInCart] = useState(
     'filmCounter' in props.film || false,
   );
-  const [filmCounter, setFilmCounter] = useState(props.film.filmCounter || 0);
+  const [filmCounter, setFilmCounter] = useState(props.film.filmCounter || 1);
 
   if (!props.film.title) {
     return (
@@ -144,127 +146,88 @@ export default function Film(props: Props) {
               data-test-id="product-image"
             />
           </div>
-          {/*   <div className="tags">
-            {props.film.tags.map((tag) => (
-              <div key={`prop${props.film.synopsis}`}>#{tag}</div>
-            ))}
-          </div> */}
+          <div className="tags">
+            {props.film.tags.map((tag) => {
+              return <div key={`film id-${tag.id}`}>#{tag.name}</div>;
+            })}
+          </div>
           <div className="synopsis">
             <strong>Synopsis: </strong> {props.film.synopsis}
           </div>
-          <div data-test-id="product-price" className="productprice">
-            <strong>Price:</strong> {props.film.price} $
+          <div className="productprice">
+            <strong>Price:</strong>{' '}
+            <div data-test-id="product-price"> {props.film.price} </div>
+            <div>$</div>
           </div>
+          <div className="productprice">
+            <strong>Number of people watching:</strong>
+          </div>
+          <button
+            onClick={() => {
+              const filmCount = filmCounter - 1;
+              const reducedfilmCount = Math.max(1, Math.min(100, filmCount));
+              setFilmCounter(reducedfilmCount);
+            }}
+          >
+            -
+          </button>
+          {filmCounter}
+          <button
+            onClick={() => {
+              setFilmCounter(filmCounter + 1);
+            }}
+          >
+            +
+          </button>
           <button
             className="buybutton"
             data-test-id="product-add-to-cart"
             onClick={() => {
-              const currentOrder = Cookies.get('order')
-                ? getParsedCookie('order')
+              const currentCart = Cookies.get('cart')
+                ? getParsedCookie('cart')
                 : [];
 
-              let newOrder;
+              const cart = [...currentCart];
 
-              if (
-                currentOrder.find(
-                  (filmInOrder) => props.film.id === filmInOrder.id,
-                )
-              ) {
-                newOrder = currentOrder.filter(
-                  (filmInOrder) => filmInOrder.id !== props.film.id,
+              let newCart;
+
+              if (cart.find((filmInCart) => props.film.id === filmInCart.id)) {
+                newCart = cart.filter(
+                  (filmInCart) => filmInCart.id !== props.film.id,
                 );
-                setIsInOrder(false);
-                setFilmCounter(0);
+                setIsInCart(false);
+                setFilmCounter(1);
               } else {
-                newOrder = [
-                  ...currentOrder,
+                newCart = [
+                  ...cart,
                   {
                     id: props.film.id,
-                    title: props.film.title,
-                    filmCounter: 1,
-                    price: props.film.price,
+                    filmCounter: filmCounter,
                   },
                 ];
-                setIsInOrder(true);
-                setFilmCounter(1);
+                setIsInCart(true);
               }
-
-              setStringifiedCookie('order', newOrder);
+              setStringifiedCookie('cart', newCart);
             }}
           >
-            {isInOrder ? 'Remove from Cart' : `Add to Cart`}
+            {isInCart ? 'Remove from Cart' : `Add to Cart`}
           </button>
-          <br />
-          {isInOrder ? (
-            <>
-              <div className="productprice">
-                <strong>Quantity:</strong>
-              </div>
-              <button
-                onClick={() => {
-                  const currentOrder = Cookies.get('order')
-                    ? getParsedCookie('order')
-                    : [];
-
-                  const currentFilmInOrder = currentOrder.find(
-                    (filmInOrder) => props.film.id === filmInOrder.id,
-                  );
-                  const filmCount = filmCounter - 1;
-                  const reducedfilmCount = Math.max(
-                    1,
-                    Math.min(100, filmCount),
-                  );
-
-                  setFilmCounter(reducedfilmCount);
-
-                  currentFilmInOrder.filmCounter = reducedfilmCount;
-
-                  setStringifiedCookie('order', currentOrder);
-                }}
-              >
-                -
-              </button>
-              {filmCounter}
-              <button
-                onClick={() => {
-                  setFilmCounter(filmCounter + 1);
-
-                  const currentOrder = Cookies.get('order')
-                    ? getParsedCookie('order')
-                    : [];
-
-                  const currentFilmInOrder = currentOrder.find(
-                    (filmInOrder) => props.film.id === filmInOrder.id,
-                  );
-                  currentFilmInOrder.filmCounter += 1;
-                  setStringifiedCookie('order', currentOrder);
-                }}
-              >
-                +
-              </button>
-            </>
-          ) : (
-            ''
-          )}
         </section>
       </main>
     </>
   );
 }
 
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const currentOrder = JSON.parse(context.req.cookies.order || '[]');
+export async function getServerSideProps(context) {
+  const currentCart = JSON.parse(context.req.cookies.cart || '[]');
 
-  const foundFilm = await getFilm(context.query.filmId);
+  const filmWithTags = await getFilmWithTagsById(context.query.filmId);
 
-  // const foundFilm = filmsDatabase.find(
-  //   (film) => film.id === context.query.filmId.filmId,P
-  // );
+  const foundFilm = await getReducedFilmsWithTags(filmWithTags);
+  console.log(foundFilm);
 
-  // 3. Find the object that represent the fruit in the url
-
-  const currentFilmInOrder = currentOrder.find(
-    (FilmInOrder) => foundFilm.id === FilmInOrder.id,
+  const currentFilmInCart = currentCart.find(
+    (film) => foundFilm.id === film.id,
   );
 
   // if (!foundFilm) {
@@ -273,7 +236,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   //   };
   // }
 
-  const superFilm = { ...foundFilm, ...currentFilmInOrder };
+  const superFilm = { ...foundFilm, ...currentFilmInCart };
 
   return {
     props: {

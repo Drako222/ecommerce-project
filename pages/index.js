@@ -7,14 +7,15 @@ export default function Home() {
     <div>
       <Head>
         <title>Home</title>
-        <meta
-          name="description"
-          content="Home page of the E-commerce website"
-        />
+        <meta name="description" content="Watch Change Together" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <h1>Biggest movie store ever</h1>
+        <h1>Watch.Change.Together</h1>
+        <p>The only VOD platform fighting global warming</p>
+        <h2> How does it work</h2>
+        <p>40 % of all admissions supports Change.Together programme</p>
+        <p></p>
       </main>
     </div>
   );

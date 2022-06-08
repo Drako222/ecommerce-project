@@ -77,7 +77,7 @@ export default function Films(props) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <h1>Select your film for tonight 🍿</h1>
+        <h1>Select your film for tonight ☘️</h1>
         <div css={filmsListStyles}>
           {props.films.map((film) => {
             return (
@@ -85,13 +85,13 @@ export default function Films(props) {
                 <div>
                   <Link
                     href={`/films/${film.id}`}
-                    data-test-id="product-<product id>"
+                    data-test-id={`product-${film.id}`}
                   >
                     <a>{film.title}</a>
                   </Link>
                   <Link
                     href={`/films/${film.id}`}
-                    data-test-id="product-<product id>"
+                    data-test-id={`product-${film.id}`}
                   >
                     <div className="imagecontainer">
                       <Image
@@ -105,7 +105,7 @@ export default function Films(props) {
                   </Link>
                   <Link
                     href={`/films/${film.id}`}
-                    data-test-id="product-<product id>"
+                    data-test-id={`product-${film.id}`}
                   >
                     <button>Select</button>
                   </Link>
@@ -124,7 +124,7 @@ export async function getServerSideProps() {
 
   return {
     props: {
-      films: films,
+      films,
     },
   };
 }

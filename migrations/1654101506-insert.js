@@ -14,7 +14,7 @@ const filmtags = [
 
 exports.up = async (sql) => {
   await sql`
-INSERT INTO film_tags ${sql(filmtags, 'film_id', 'tag_id')}
+INSERT INTO films_tags ${sql(filmtags, 'film_id', 'tag_id')}
 `;
 };
 
@@ -22,7 +22,7 @@ exports.down = async (sql) => {
   for (const filmtag of filmtags) {
     await sql`
       DELETE FROM
-        film_tags
+        films_tags
       WHERE
         film_id=${filmtag.film_id} AND
 				tag_id=${filmtag.tag_id}

@@ -4,12 +4,12 @@ export default function Success() {
   return (
     <>
       <Head>
-        <title>Thank you for your order</title>
+        <title>Thank you!</title>
         <meta name="description" content="Your order was successful" />
       </Head>
       <main>
-        <h1>The film is on its way to you</h1>
-        <div>Have a nice day and enjoy!</div>
+        <h1>Enjoy watching our films!</h1>
+        <h2>Have a nice day and enjoy!</h2>
       </main>
     </>
   );

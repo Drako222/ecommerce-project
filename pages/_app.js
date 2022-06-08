@@ -1,10 +1,24 @@
 import '../styles/globals.css';
 import { css, Global } from '@emotion/react';
+import Cookies from 'js-cookie';
+import { useEffect, useState } from 'react';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Layout from '../components/Layout';
+import { getParsedCookie } from '../util/cookies';
+import { getQuantity } from '../util/functions';
+import { getServerSideProps } from './films';
 
 function MyApp({ Component, pageProps }) {
+  // useEffect(() => {
+  //   const currentCart = Cookies.get('cart') ? getParsedCookie('cart') : [];
+  //   const finalQuantity =
+  //     typeof currentCart === undefined ? '' : getQuantity(currentCart);
+  //   setQuantity(finalQuantity);
+  // }, []);
+
+  // const [quantity, setQuantity] = useState('');
+
   return (
     <>
       <Global
@@ -27,12 +41,16 @@ function MyApp({ Component, pageProps }) {
             margin: 40px auto 40px;
             text-align: center;
           }
+
+          h2 {
+            margin: 40px auto 40px;
+            text-align: center;
+          }
         `}
       />
-      <div className="headerPosition">
-        <Header />
-      </div>
+
       <Layout>
+        <Header />
         <Component {...pageProps} />
       </Layout>
       <Footer />

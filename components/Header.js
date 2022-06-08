@@ -1,6 +1,10 @@
 import { css } from '@emotion/react';
+import Cookies from 'js-cookie';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { getParsedCookie } from '../util/cookies';
+import { getQuantity } from '../util/functions';
 
 const headerStyles = css`
   display: flex;
@@ -14,17 +18,21 @@ const headerStyles = css`
   width: 100%;
   height: 80px;
 
+  .logo {
+    font-family: 'GraphiqueW01-Regular';
+    font-size: 2.5rem;
+    color: green;
+    align-self: center;
+
+    a:hover {
+      color: white;
+    }
+  }
+
   a {
     :hover {
       color: gray;
     }
-  }
-
-  .logo {
-    font-family: 'GraphiqueW01-Regular';
-    font-size: 2.5rem;
-    color: red;
-    align-self: center;
   }
 
   .centernav {
@@ -50,11 +58,28 @@ const iconStyles = css`
   cursor: pointer;
 `;
 
-export default function Header() {
+export default function Header(props) {
+  // const currentCart = Cookies.get('cart') ? getParsedCookie('cart') : [];
+
+  // useEffect(() => {
+  //   const finalQuantity =
+  //     typeof currentCart === undefined ? '' : getQuantity(currentCart);
+  //   setQuantity(finalQuantity);
+  // }, [currentCart]);
+
+  // useEffect(() => {
+  //   if (typeof window !== 'undefined') {
+  //     const cartItemsFromStorage = localStorage.getItem('cartItems')
+  //       ? JSON.parse(localStorage.getItem('cartItems'))
+  //       : [];
+  //     setQuantity(cartItemsFromStorage);
+  //   }
+  // }, []);
+
   return (
-    <div css={headerStyles}>
+    <header css={headerStyles}>
       <div className="logo">
-        <Link href="/">Mindflix</Link>
+        <Link href="/">EarthFlix</Link>
       </div>
       <div className="centernav">
         <Link href="/">Home</Link>
@@ -72,7 +97,8 @@ export default function Header() {
             css={iconStyles}
           />
         </Link>
+        <div data-test-id="cart-count">{props.quantity}</div>
       </div>
-    </div>
+    </header>
   );
 }

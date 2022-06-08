@@ -1,8 +1,12 @@
 import { css } from '@emotion/react';
 import Cookies from 'js-cookie';
 import Head from 'next/head';
+import Image from 'next/image';
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { getParsedCookie, setStringifiedCookie } from '../../util/cookies.ts';
+import { getParsedCookie, setStringifiedCookie } from '../../util/cookies.js';
+import { getFilmsDatabase } from '../../util/filmsDatabase';
+import { totalCounting } from '../../util/functions';
 
 const cartStyles = css`
   .totalprice {
@@ -11,23 +15,16 @@ const cartStyles = css`
 `;
 
 export default function Cart(props) {
-  const [totalPrice, setTotalPrice] = useState(0);
+  const [cartList, setCartList] = useState(props.films || []);
 
-  const totalCounting = props.films.map((film) => {
-    const filmPrice = Number(film.price);
-    const filmCounter = Number(film.filmCounter);
-    const filmPriceTotal = filmPrice * filmCounter;
-    return filmPriceTotal;
-  });
-
-  function add(accumulator, a) {
-    return accumulator + a;
-  }
-  const sum = totalCounting.reduce(add, 0);
-
-  useEffect(() => {
-    setTotalPrice(sum);
-  }, [sum]);
+  const onClickDeleteButton = (id) => {
+    const cookieValue = [...props.currentCart];
+    console.log(cookieValue);
+    const newCookieValue = cookieValue.filter((p) => p.id !== id);
+    const newInCart = cartList.filter((item) => item.id !== id);
+    setStringifiedCookie('cart', newInCart);
+    setCartList([...newInCart]);
+  };
 
   return (
     <>
@@ -37,40 +34,33 @@ export default function Cart(props) {
       </Head>
       <main css={cartStyles}>
         <h1>Cart overview</h1>
-        <h2 data-test-id="cart-total">Total Price: {totalPrice}</h2>
-        <button data-test-id="cart-checkout">Checkout</button>
+        <h2 data-test-id="cart-total">
+          Total Price: {totalCounting(cartList)} $
+        </h2>
+        <Link href="/cart/checkout" data-test-id="cart-checkout">
+          <button>Checkout</button>
+        </Link>
         <ul>
-          {props.films.map((film) => {
+          {cartList.map((film) => {
             return (
               <li
                 key={`film.id-${film.id}`}
                 data-test-id={`cart-product-${film.id}`}
               >
                 <p>Title: {film.title}</p>
+                <Image
+                  src={`/../public/poster${film.id}.png`}
+                  alt={film.title}
+                  height="200px"
+                  width="150px"
+                />
                 <p data-test-id={`cart-product-quantity-${film.id}`}>
                   Quantity: {film.filmCounter}
                 </p>
                 <p>Price: {~~film.price * ~~film.filmCounter}</p>
                 <button
                   data-test-id={`cart-product-remove-${film.id}`}
-                  onClick={() => {
-                    const currentOrder = Cookies.get('order')
-                      ? getParsedCookie('order')
-                      : [];
-
-                    let newOrder;
-
-                    if (
-                      currentOrder.find(
-                        (filmInOrder) => film.id === filmInOrder.id,
-                      )
-                    ) {
-                      newOrder = currentOrder.filter(
-                        (filmInOrder) => filmInOrder.id !== film.id,
-                      );
-                    }
-                    setStringifiedCookie('order', newOrder);
-                  }}
+                  onClick={() => onClickDeleteButton(film.id)}
                 >
                   Remove
                 </button>
@@ -83,12 +73,27 @@ export default function Cart(props) {
   );
 }
 
-export function getServerSideProps(context) {
-  const currentOrder = JSON.parse(context.req.cookies.order || '[]');
+export async function getServerSideProps(context) {
+  const allFilms = await getFilmsDatabase();
+
+  const cookie = context.req.cookies.cart;
+  const currentCart = cookie ? JSON.parse(context.req.cookies.cart) : '[]';
+
+  const films = currentCart.map((p) => {
+    const cartObject = allFilms.find((prod) => prod.id === p.id);
+
+    return {
+      id: cartObject.id,
+      title: cartObject.title,
+      price: cartObject.price,
+      filmCounter: p.filmCounter,
+    };
+  });
 
   return {
     props: {
-      films: currentOrder,
+      films,
+      currentCart,
     },
   };
 }
