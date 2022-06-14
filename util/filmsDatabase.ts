@@ -2,7 +2,7 @@ import { config } from 'dotenv-safe';
 import postgres from 'postgres';
 import { FilmfromDatabase, Props } from '../pages/films/[filmId]';
 
-import setPostgresDefaultsOnHeroku from './setPostgresDefaultsOnHeroku';
+import { setPostgresDefaultsOnHeroku } from './setPostgresDefaultsOnHeroku';
 
 setPostgresDefaultsOnHeroku();
 
