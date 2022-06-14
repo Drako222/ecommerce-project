@@ -1,8 +1,5 @@
 {
   "name": "ecommerce-project",
-  "cacheDirectories": [
-    ".next/cache"
-  ],
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -11,8 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
-    "heroku-postbuild": "yarn migrate up && yarn build",
-    "migrate": "dotenv ley"
+    "migrate": "dotenv ley",
+    "heroku-postbuild": "yarn migrate up && yarn build"
   },
   "dependencies": {
     "@emotion/react": "^11.9.0",
@@ -75,5 +72,8 @@
     "eslint-plugin-react": "7.29.4",
     "eslint-plugin-react-hooks": "4.5.0",
     "@typescript-eslint/utils": "5.22.0"
-  }
+  },
+  "cacheDirectories": [
+    ".next/cache"
+  ]
 }
