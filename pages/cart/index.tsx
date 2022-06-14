@@ -119,7 +119,7 @@ export default function Cart(props: Props2) {
               >
                 <p>{film.title}</p>
                 <Image
-                  src={`/../public/poster${film.id}.jpg`}
+                  src={`/poster${film.id}.jpg`}
                   alt={film.title}
                   height="200px"
                   width="150px"
