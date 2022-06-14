@@ -14,104 +14,126 @@ const headerStyles = css`
   z-index: 50;
   position: fixed;
   top: 0;
-  background-color: #020202;
-  color: white;
+  background-color: white;
   width: 100%;
   height: 80px;
+  border-bottom: 3px solid #a4de02;
 
-  .logo {
-    font-family: 'GraphiqueW01-Regular';
-    font-size: 2.5rem;
-    color: green;
+  .mainlogo {
+    cursor: pointer;
     align-self: center;
+    transition: all 0.4s ease-in-out;
 
-    a:hover {
-      color: white;
+    :hover {
+      filter: brightness(200%);
+      box-shadow: -20px 0 black, 0 20px black, 20px 0 black, 0 -20px black;
+    }
+  }
+
+  .mainlogo {
+    cursor: pointer;
+    align-self: center;
+    transition: all 0.4s ease-in-out;
+
+    :hover {
+      filter: brightness(20%);
     }
   }
 
   a {
+    color: #000c07;
+    transition: all 0.4s ease-in-out;
+
     :hover {
-      color: gray;
+      color: #a4de02;
     }
   }
 
   .centernav {
+    display: flex;
+    justify-content: flex-end;
     align-self: center;
-    gap: 40px;
-    font-size: 1.5rem;
+    gap: 10px;
+    font-size: 1.4rem;
 
     a + a {
       margin-left: 20px;
     }
   }
 
+  .films {
+    padding-right: 10px;
+    padding-left: 16px;
+    color: black;
+  }
+
   .cart {
+    display: flex;
+    justify-content: center;
+  }
+
+  .shoppingcart {
+    cursor: pointer;
     align-self: center;
+    padding-left: 20px;
+    transition: all 0.4s ease-in-out;
 
     :hover {
-      opacity: 0.5;
+      filter: brightness(160%);
     }
+  }
+
+  .cartQuantity {
+    align-self: flex-end;
+    font-size: small;
+    color: white;
+    background-color: #a4de02;
+    border-radius: 50px;
+    width: 20px;
+    text-align: center;
+    transition: all 0.4s ease-in-out;
   }
 `;
 
-const iconStyles = css`
-  cursor: pointer;
-`;
-
 export default function Header(props) {
-  const [cart, setCart] = useState('');
-
-  // useEffect(() => {
-  //   // since we are in useEffect, that means we are in browser and window is already defined
-  //   // So you do not need to use  (typeof window !== "undefined") in useEfect
-  //   // in case you want to use somewhere else, keep in mind you have to use (typeof window !== "undefined")
-  //   // you do not just store cartitems in localstorage, you c an store all nonsensitive data in localstorage, thats why I put others too
-  //   // go any ecommerce website, add something to cart, and in browser dev tools, application tab, check localstorage. you see bunch of stored data
-  //   if (typeof window !== 'undefined') {
-  //     const cartItemsFromStorage = localStorage.getItem('cartItems')
-  //       ? JSON.parse(localStorage.getItem('cartItems'))
-  //       : [];
-  //     setCart(cartItemsFromStorage);
-  //   }
-  // });
-  // const currentCart = Cookies.get('cart') ? getParsedCookie('cart') : [];
-
-  // useEffect(() => {
-  //
-  // }, [currentCart]);
-
-  // useEffect(() => {
-  //   if (typeof window !== 'undefined') {
-  //     const cartItemsFromStorage = localStorage.getItem('cartItems')
-  //       ? JSON.parse(localStorage.getItem('cartItems'))
-  //       : [];
-  //     setQuantity(cartItemsFromStorage);
-  //   }
-  // }, []);
+  const cartQuatity = getQuantity(props.cart);
 
   return (
     <header css={headerStyles}>
       <div className="logo">
-        <Link href="/">EarthFlix</Link>
-      </div>
-      <div className="centernav">
-        <Link href="/">Home</Link>
-        <Link href="/films" data-test-id="products-link">
-          Films
-        </Link>
-      </div>
-      <div className="cart">
-        <Link href="/cart">
+        <Link href="/about">
           <Image
-            src="/cart.png"
-            alt="cart"
-            height="20px"
-            width="25px"
-            css={iconStyles}
-          />
+            className="mainlogo"
+            src="/mainlogo.png"
+            width="210px"
+            height="50px"
+            alt="earthlix logo"
+          ></Image>
         </Link>
-        <div data-test-id="cart-count">{props.length}</div>
+      </div>
+      <div>
+        <div className="centernav">
+          <Link href="/about">About</Link>
+          <div className="films">
+            <Link href="/" data-test-id="products-link">
+              Films
+            </Link>
+          </div>
+          <div className="cart">
+            <Link href="/cart" htmlId="cart">
+              <Image
+                className="shoppingcart"
+                src="/shoppingcart.jpg"
+                alt="cart"
+                height="35px"
+                width="40px"
+              />
+            </Link>
+            <div className="cartQuantity" data-test-id="cart-count">
+              {cartQuatity || ''}
+            </div>
+          </div>
+        </div>
       </div>
     </header>
   );

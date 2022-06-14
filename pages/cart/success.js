@@ -8,8 +8,8 @@ export default function Success() {
         <meta name="description" content="Your order was successful" />
       </Head>
       <main>
-        <h1>Enjoy watching our films!</h1>
-        <h2>Have a nice day and enjoy!</h2>
+        <h1>Thank you! 🙏</h1>
+        <h2>Enjoy watching our films!</h2>
       </main>
     </>
   );

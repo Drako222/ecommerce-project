@@ -4,13 +4,60 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { getParsedCookie, setStringifiedCookie } from '../../util/cookies.js';
-import { getFilmsDatabase } from '../../util/filmsDatabase.js';
+import { getParsedCookie, setStringifiedCookie } from '../../util/cookies';
+import { getFilmsDatabase } from '../../util/filmsDatabase';
 import { getQuantity, totalCounting } from '../../util/functions';
 
 const cartStyles = css`
+  margin: 0px auto 0px;
+  text-align: center;
+
+  h1 {
+    margin-bottom: 0px;
+  }
+
   .totalprice {
     text-align: left;
+  }
+
+  ul {
+    list-style: none;
+    padding-inline-start: 0px;
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+  }
+
+  .checkoutbutton {
+    font-size: 20px;
+    line-height: 30px;
+    margin-bottom: 20px;
+  }
+
+  button {
+    cursor: pointer;
+    border-radius: 20px;
+    text-decoration: none;
+    font-family: 'Open Sans', sans-serif;
+    padding: 14px 21px;
+    font-size: 13px;
+    line-height: 25px;
+    text-transform: uppercase;
+    border: solid 3px #a4de02;
+    background: #000c07;
+    color: white;
+    letter-spacing: 3px;
+    -webkit-transition: all 0.4s ease-in-out;
+    -moz-transition: all 0.4s ease-in-out;
+    -ms-transition: all 0.4s ease-in-out;
+    -o-transition: all 0.4s ease-in-out;
+    transition: all 0.4s ease-in-out;
+
+    :hover {
+      border: solid 3px white;
+      background: #a4de02;
+      color: #000c07;
+    }
   }
 `;
 
@@ -24,6 +71,7 @@ export default function Cart(props) {
     const newInCart = cartList.filter((item) => item.id !== id);
     setStringifiedCookie('cart', newInCart);
     setCartList([...newInCart]);
+    props.setCart(newInCart);
   };
 
   return (
@@ -33,13 +81,13 @@ export default function Cart(props) {
         <meta name="description" content="Overview of you shopping cart" />
       </Head>
       <main css={cartStyles}>
-        <h1>Cart overview</h1>
+        <h1>Your Cart🌱</h1>
         <h2 data-test-id="cart-total">
-          Total Price: {totalCounting(cartList)} $
+          Total Price: {totalCounting(cartList)} 💰
         </h2>
         {cartList.length ? (
           <Link href="/cart/checkout" data-test-id="cart-checkout">
-            <button>Checkout</button>
+            <button className="checkoutbutton">Checkout</button>
           </Link>
         ) : (
           ''
@@ -51,17 +99,18 @@ export default function Cart(props) {
                 key={`film.id-${film.id}`}
                 data-test-id={`cart-product-${film.id}`}
               >
-                <p>Title: {film.title}</p>
+                <p>{film.title}</p>
                 <Image
-                  src={`/../public/poster${film.id}.png`}
+                  src={`/../public/poster${film.id}.jpg`}
                   alt={film.title}
                   height="200px"
                   width="150px"
                 />
+
                 <p data-test-id={`cart-product-quantity-${film.id}`}>
-                  Quantity: {film.filmCounter}
+                  {film.filmCounter} 🧑‍🤝‍🧑
                 </p>
-                <p>Price: {~~film.price * ~~film.filmCounter}</p>
+                <p>{~~film.price * ~~film.filmCounter} 💰 </p>
                 <button
                   data-test-id={`cart-product-remove-${film.id}`}
                   onClick={() => onClickDeleteButton(film.id)}
@@ -81,7 +130,7 @@ export async function getServerSideProps(context) {
   const allFilms = await getFilmsDatabase();
 
   const cookie = context.req.cookies.cart;
-  const currentCart = cookie ? JSON.parse(context.req.cookies.cart) : '[]';
+  const currentCart = cookie ? JSON.parse(context.req.cookies.cart) : [];
 
   const films = currentCart.map((p) => {
     const cartObject = allFilms.find((prod) => prod.id === p.id);
@@ -93,14 +142,6 @@ export async function getServerSideProps(context) {
       filmCounter: p.filmCounter,
     };
   });
-
-  // undefined ? '' :
-
-  // if (!foundFilm) {
-  //   return {
-  //     film: null,
-  //   };
-  // }
 
   return {
     props: {

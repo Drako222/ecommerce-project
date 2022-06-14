@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import Head from 'next/head';
 import Link from 'next/link';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import { deleteCookie } from '../../util/cookies';
 import { getFilmsDatabase } from '../../util/filmsDatabase';
 
@@ -31,12 +32,23 @@ const containerStyles = css`
   justify-content: center;
   text-align: center;
   max-width: 800px;
-  background-color: #f2f2f2;
+  background-color: #acdf87;
   padding: 5px 20px 15px 20px;
   border: 1px solid lightgrey;
-  color: black;
-  border-radius: 3px;
+  color: #000c07;
+  border-radius: 20px;
   gap: 15px;
+
+  ul {
+    list-style: none;
+    padding-inline-start: 0px;
+    margin-top: 30px;
+
+    li {
+      text-align: center;
+      color: #000c07;
+    }
+  }
 
   h3 {
     margin-bottom: 30px;
@@ -48,7 +60,17 @@ const containerStyles = css`
     margin-bottom: 20px;
     padding: 12px;
     border: 1px solid #ccc;
-    border-radius: 3px;
+    border-radius: 20px;
+  }
+
+  select:focus,
+  input:focus {
+    outline: none;
+    border: 3px solid #a4de02;
+  }
+
+  .input--error {
+    border-color: red;
   }
 
   label {
@@ -63,17 +85,17 @@ const containerStyles = css`
 
 const buttonStyles = css`
   cursor: pointer;
-  text-align: center;
-  border-radius: 10px;
+  margin-top: 50px;
+  border-radius: 20px;
   text-decoration: none;
+  font-family: 'Open Sans', sans-serif;
   padding: 14px 21px;
   font-size: 13px;
   line-height: 25px;
-  margin-top: 15px;
   text-transform: uppercase;
-  border: solid 2px #1f1f1f;
-  background: white;
-  color: black;
+  border: solid 3px #a4de02;
+  background: #000c07;
+  color: white;
   letter-spacing: 3px;
   -webkit-transition: all 0.4s ease-in-out;
   -moz-transition: all 0.4s ease-in-out;
@@ -82,9 +104,9 @@ const buttonStyles = css`
   transition: all 0.4s ease-in-out;
 
   :hover {
-    border: solid 2px #1f1f1f;
-    background: black;
-    color: white;
+    border: solid 3px white;
+    background: #a4de02;
+    color: #000c07;
   }
 `;
 
@@ -95,6 +117,14 @@ export default function Checkout(props) {
     const filmPriceTotal = filmPrice * filmCounter;
     return filmPriceTotal;
   });
+
+  const handleSubmit = (e) => {
+    if (!alert) {
+      e.preventDefault();
+      deleteCookie('cart');
+      props.setCart([]);
+    }
+  };
 
   const sum = totalCounting.reduce((accumulator, a) => accumulator + a, 0);
 
@@ -108,8 +138,8 @@ export default function Checkout(props) {
         />
       </Head>
       <main>
-        <h1>Checkout</h1>
-        <form css={formStyles}>
+        <h1>Checkout♻️</h1>
+        <form css={formStyles} action="/cart/success">
           <div css={containerStyles}>
             <div className="row">
               <h3>Billing Address</h3>
@@ -118,7 +148,9 @@ export default function Checkout(props) {
               </label>
               <input
                 type="text"
-                id="firstname"
+                htmlId="firstname"
+                minlength="1"
+                maxlength="40"
                 name="firstname"
                 placeholder="John"
                 data-test-id="checkout-first-name"
@@ -128,8 +160,10 @@ export default function Checkout(props) {
                 <i class="fa fa-user"></i> Last Name
               </label>
               <input
+                minlength="1"
+                maxlength="40"
                 type="text"
-                id="surname"
+                htmlId="surname"
                 name="surname"
                 placeholder="Doe"
                 data-test-id="checkout-last-name"
@@ -140,7 +174,7 @@ export default function Checkout(props) {
               </label>
               <input
                 type="email"
-                id="email"
+                htmlId="email"
                 name="email"
                 placeholder="john@example.com"
                 data-test-id="checkout-email"
@@ -151,7 +185,9 @@ export default function Checkout(props) {
               </label>
               <input
                 type="text"
-                id="adr"
+                htmlId="adr"
+                minlength="3"
+                maxlength="40"
                 name="address"
                 placeholder="542 W. 15th Street"
                 data-test-id="checkout-address"
@@ -162,7 +198,9 @@ export default function Checkout(props) {
               </label>
               <input
                 type="text"
-                id="city"
+                minlength="1"
+                maxlength="20"
+                htmlId="city"
                 name="city"
                 placeholder="New York"
                 data-test-id="checkout-city"
@@ -171,7 +209,9 @@ export default function Checkout(props) {
               <label for="ZIP">ZIP code</label>
               <input
                 type="number"
-                id="ZIP"
+                minlength="4"
+                maxlength="10"
+                htmlId="ZIP"
                 name="ZIP"
                 placeholder="68021"
                 data-test-id="checkout-postal-code"
@@ -181,7 +221,7 @@ export default function Checkout(props) {
                 <i class="fa fa-country"></i>Country
               </label>
               <select
-                id="country"
+                htmlId="country"
                 name="country"
                 class="form-control"
                 required
@@ -499,16 +539,9 @@ export default function Checkout(props) {
             </div>
             <div className="row">
               <h3>Payment</h3>
-              {/*     <label for="fname">Accepted Cards</label>
-    <div class="icon-container">
-      <i class="fa fa-cc-visa" style="color:navy;"></i>
-      <i class="fa fa-cc-amex" style="color:blue;"></i>
-      <i class="fa fa-cc-mastercard" style="color:red;"></i>
-      <i class="fa fa-cc-discover" style="color:orange;"></i>
-    </div> */}
               <label for="ccnum">Credit card number</label>
               <input
-                id="ccnum"
+                htmlId="ccnum"
                 type="tel"
                 inputmode="numeric"
                 pattern="[0-9\s]{13,19}"
@@ -521,9 +554,8 @@ export default function Checkout(props) {
               />
               <label for="expmonth">Exp Month</label>
               <input
-                type="text"
                 type="date"
-                id="expmonth"
+                htmlId="expmonth"
                 name="expmonth"
                 placeholder="YYYY-MM-DD"
                 data-test-id="checkout-expiration-date"
@@ -532,7 +564,7 @@ export default function Checkout(props) {
               <label for="cvv">CVV</label>
               <input
                 type="number"
-                id="cvv"
+                htmlId="cvv"
                 name="cvv"
                 maxlength="3"
                 placeholder="352"
@@ -540,14 +572,31 @@ export default function Checkout(props) {
                 required
               />
               <h3>Total price</h3>
-              <div>{sum} $</div>
+              <div>{sum} 💰</div>
+              <ul>
+                {props.films.map((film) => {
+                  return (
+                    <li
+                      key={`film.id-${film.id}`}
+                      data-test-id={`cart-product-${film.id}`}
+                    >
+                      <p>{film.title}</p>
+                    </li>
+                  );
+                })}
+              </ul>
             </div>
           </div>
-          <Link href="/cart/success" data-test-id="checkout-confirm-order">
-            <button css={buttonStyles} onClick={() => deleteCookie('cart')}>
-              Confirm order
-            </button>
-          </Link>
+          <button
+            className="button"
+            href="success"
+            type="submit"
+            data-test-id="checkout-confirm-order"
+            css={buttonStyles}
+            onClick={(e) => handleSubmit(e)}
+          >
+            Confirm order
+          </button>
         </form>
       </main>
     </>

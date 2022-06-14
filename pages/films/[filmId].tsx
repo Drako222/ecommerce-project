@@ -1,26 +1,29 @@
 import { css } from '@emotion/react';
 import Cookies from 'js-cookie';
-import { GetServerSidePropsContext } from 'next';
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useState } from 'react';
+import HoverVideoPlayer from 'react-hover-video-player';
 import { getParsedCookie, setStringifiedCookie } from '../../util/cookies';
 import { getReducedFilmsWithTags } from '../../util/datastructures';
-import { getFilmWithTagsById } from '../../util/filmsDatabase.js';
+import { getFilmWithTagsById } from '../../util/filmsDatabase';
 import { addingOrRemovingCookies } from '../../util/functions';
+import { queryParamsNumbers } from '../../util/queryParams';
 
 const filmPageStyles = css`
-  h1 {
-    margin: 20px auto;
+  font-weight: 300;
+  font-size: 0.9rem;
+
+  span {
+    color: white;
     text-align: center;
+    font-weight: 400;
+    font-size: 1.1rem;
+    align-self: center;
   }
 
   input {
-    text-align: center;
-  }
-
-  section {
-    margin: auto;
     text-align: center;
   }
 
@@ -28,10 +31,22 @@ const filmPageStyles = css`
     position: relative;
     max-width: 1000px;
     margin: auto;
+    transition: all 0.4s ease-in-out;
+
+    img,
+    video {
+      border-radius: 20px;
+    }
+
+    :hover {
+      filter: brightness(110%);
+    }
   }
 
   .synopsis {
-    margin: 20px auto 20px;
+    margin: 50px auto 50px;
+    text-align: justify;
+    max-width: 1000px;
   }
 
   .tags {
@@ -40,11 +55,24 @@ const filmPageStyles = css`
     gap: 20px;
     font-weight: bold;
     text-align: center;
-    margin: 20px auto;
+    margin: 50px auto 50px;
+  }
+
+  h1 {
+    margin: 50px auto 70px;
+    text-align: center;
+    font-size: 2.1rem;
+    color: white;
+  }
+
+  section {
+    margin: auto;
+    text-align: center;
+    max-width: 1280px;
   }
 
   .productprice {
-    margin: 20px auto 20px;
+    margin: 50px auto 20px;
   }
 
   .quantityselector {
@@ -52,19 +80,24 @@ const filmPageStyles = css`
     flex-direction: row;
     justify-content: center;
     gap: 20px;
+
+    & + & {
+      margin: 50px auto 50px;
+    }
   }
 
   button {
     cursor: pointer;
-    border-radius: 10px;
+    border-radius: 20px;
     text-decoration: none;
+    font-family: 'Open Sans', sans-serif;
     padding: 14px 21px;
     font-size: 13px;
     line-height: 25px;
     text-transform: uppercase;
-    border: solid 2px #1f1f1f;
-    background: white;
-    color: black;
+    border: solid 3px #a4de02;
+    background: #000c07;
+    color: white;
     letter-spacing: 3px;
     -webkit-transition: all 0.4s ease-in-out;
     -moz-transition: all 0.4s ease-in-out;
@@ -73,9 +106,9 @@ const filmPageStyles = css`
     transition: all 0.4s ease-in-out;
 
     :hover {
-      border: solid 2px #1f1f1f;
-      background: black;
-      color: white;
+      border: solid 3px white;
+      background: #a4de02;
+      color: #000c07;
     }
   }
 
@@ -84,7 +117,7 @@ const filmPageStyles = css`
   }
 `;
 
-export type FilmInOrder = {
+export type FilmInCart = {
   id: string;
   filmCounter: number;
 };
@@ -95,11 +128,22 @@ export type Props = {
     price: string | number;
     genre: string;
     synopsis: string;
-    tags: any;
+    tags: Tags[];
     filmCounter: number | undefined;
     id: string;
   };
+  cart: any;
+  setCart: any;
 };
+export type FilmfromDatabase = {
+  id: string;
+  title: string;
+  genre: string;
+  synopsis: string;
+  price: string;
+};
+
+export type Tags = { id: string; name: string };
 
 export default function Film(props: Props) {
   const [isInCart, setIsInCart] = useState(
@@ -137,158 +181,184 @@ export default function Film(props: Props) {
         <h1>{props.film.title}</h1>
         <section>
           <div className="imagecontainer">
-            <Image
-              src={`/${props.film.id}.jpg`}
-              alt={props.film.title}
-              layout="responsive"
-              height="20px"
-              width="30px"
-              data-test-id="product-image"
+            <HoverVideoPlayer
+              videoSrc={`/${props.film.id}.mp4`}
+              pausedOverlay={
+                <Image
+                  src={`/${props.film.id}.jpg`}
+                  alt={props.film.title}
+                  data-test-id="product-image"
+                  height="720px"
+                  width="1280px"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                  }}
+                />
+              }
+              loadingOverlay={
+                <div className="loading-overlay">
+                  <div className="loading-spinner" />
+                </div>
+              }
             />
           </div>
           <div className="tags">
-            {props.film.tags.map((tag) => {
-              return <div key={`film id-${tag.id}`}>#{tag.name}</div>;
+            {props.film.tags.map((tag: Tags) => {
+              return (
+                <div key={`film id-${tag.id}`}>
+                  <span>#{tag.name}</span>
+                </div>
+              );
             })}
           </div>
-          <div className="synopsis">
-            <strong>Synopsis: </strong> {props.film.synopsis}
+          <div className="synopsis">{props.film.synopsis}</div>
+          <div>
+            <div className="productprice">
+              <span>Price:</span>{' '}
+            </div>
+            <div data-test-id="product-price"> {props.film.price} 💰 </div>
           </div>
           <div className="productprice">
-            <strong>Price:</strong>{' '}
-            <div data-test-id="product-price"> {props.film.price} </div>
-            <div>$</div>
+            <span>Number of people watching:</span>
           </div>
-          <div className="productprice">
-            <strong>Number of people watching:</strong>
-          </div>
-          <button
-            onClick={() => {
-              const filmCount = filmCounter - 1;
-              const reducedfilmCount = Math.max(1, Math.min(100, filmCount));
-              setFilmCounter(reducedfilmCount);
+          <div className="quantityselector">
+            <button
+              onClick={() => {
+                const filmCount = filmCounter - 1;
+                const reducedfilmCount = Math.max(1, Math.min(100, filmCount));
+                setFilmCounter(reducedfilmCount);
 
-              if (isInCart) {
-                const currentCart = Cookies.get('cart')
-                  ? getParsedCookie('cart')
-                  : [];
+                if (isInCart) {
+                  const currentCart = Cookies.get('cart')
+                    ? getParsedCookie('cart')
+                    : [];
 
-                const cart = [...currentCart];
-                let filteredCart = cart.filter(
-                  (filmInCart) => filmInCart.id !== props.film.id,
-                );
-
-                const newCart = [
-                  ...filteredCart,
-                  {
-                    id: props.film.id,
-                    filmCounter: reducedfilmCount,
-                  },
-                ];
-                setStringifiedCookie('cart', newCart);
-              }
-            }}
-          >
-            -
-          </button>
-          {filmCounter}
-          <button
-            onClick={() => {
-              setFilmCounter(filmCounter + 1);
-
-              if (isInCart) {
-                const currentCart = Cookies.get('cart')
-                  ? getParsedCookie('cart')
-                  : [];
-
-                const addition = filmCounter + 1;
-
-                const cart = [...currentCart];
-                let filteredCart = cart.filter(
-                  (filmInCart) => filmInCart.id !== props.film.id,
-                );
-
-                const newCart = [
-                  ...filteredCart,
-                  {
-                    id: props.film.id,
-                    filmCounter: addition,
-                  },
-                ];
-                setStringifiedCookie('cart', newCart);
-
-                /*    if (typeof window !== undefined) {
-                  localStorage.setItem(
-                    'cartItems',
-                    JSON.stringify(getState().filmCounter),
+                  let filteredCart = currentCart.filter(
+                    (filmInCart: FilmInCart) => filmInCart.id !== props.film.id,
                   );
-                } */
+
+                  const newCart = [
+                    ...filteredCart,
+                    {
+                      id: props.film.id,
+                      filmCounter: reducedfilmCount,
+                    },
+                  ];
+                  setStringifiedCookie('cart', newCart);
+                  props.setCart(newCart);
+                }
+              }}
+            >
+              -
+            </button>
+            <input
+              data-test-id="product-quantity"
+              type="number"
+              onKeyPress={(event) => {
+                if (!/[0-9]/.test(event.key)) {
+                  event.preventDefault();
+                }
+              }}
+              value={filmCounter}
+              onChange={(event) =>
+                setFilmCounter(
+                  Math.max(1, Math.min(100, Number(event.currentTarget.value))),
+                )
               }
-            }}
-          >
-            +
-          </button>
-          <button
-            className="buybutton"
-            data-test-id="product-add-to-cart"
-            onClick={() => {
-              const currentCart = Cookies.get('cart')
-                ? getParsedCookie('cart')
-                : [];
+            />
+            <span>🧑‍🤝‍🧑</span>
+            <button
+              onClick={() => {
+                setFilmCounter(filmCounter + 1);
 
-              const cart = [...currentCart];
+                if (isInCart) {
+                  const currentCart = Cookies.get('cart')
+                    ? getParsedCookie('cart')
+                    : [];
 
-              let newCart;
+                  const addition = filmCounter + 1;
 
-              if (cart.find((filmInCart) => props.film.id === filmInCart.id)) {
-                newCart = cart.filter(
-                  (filmInCart) => filmInCart.id !== props.film.id,
-                );
-                setIsInCart(false);
-                setFilmCounter(1);
-              } else {
-                newCart = [
-                  ...cart,
-                  {
-                    id: props.film.id,
-                    filmCounter: filmCounter,
-                  },
-                ];
-                setIsInCart(true);
-              }
-              setStringifiedCookie('cart', newCart);
+                  let filteredCart = currentCart.filter(
+                    (filmInCart: FilmInCart) => filmInCart.id !== props.film.id,
+                  );
 
-              window.localStorage.setItem(
-                'cartItems',
-                JSON.stringify(filmCounter),
-              );
-            }}
-          >
-            {isInCart ? 'Remove from Cart' : `Add to Cart`}
-          </button>
+                  const newCart = [
+                    ...filteredCart,
+                    {
+                      id: props.film.id,
+                      filmCounter: addition,
+                    },
+                  ];
+                  setStringifiedCookie('cart', newCart);
+                  props.setCart(newCart);
+                }
+              }}
+            >
+              +
+            </button>
+            <button
+              data-test-id="product-add-to-cart"
+              onClick={() => {
+                const currentCart = Cookies.get('cart')
+                  ? getParsedCookie('cart')
+                  : [];
+
+                const cart = [...currentCart];
+
+                let newCart;
+
+                if (
+                  cart.find((filmInCart) => props.film.id === filmInCart.id)
+                ) {
+                  newCart = cart.filter(
+                    (filmInCart: FilmInCart) => filmInCart.id !== props.film.id,
+                  );
+                  setIsInCart(false);
+                  setFilmCounter(1);
+                } else {
+                  newCart = [
+                    ...cart,
+                    {
+                      id: props.film.id,
+                      filmCounter: filmCounter,
+                    },
+                  ];
+                  setIsInCart(true);
+                }
+                setStringifiedCookie('cart', newCart);
+                props.setCart(newCart);
+              }}
+            >
+              {isInCart ? 'Remove from Cart' : `Add to Cart`}
+            </button>
+          </div>
         </section>
       </main>
     </>
   );
 }
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
   const currentCart = JSON.parse(context.req.cookies.cart || '[]');
 
-  const filmWithTags = await getFilmWithTagsById(context.query.filmId);
+  if (!currentCart) {
+    return {
+      props: {
+        film: null,
+      },
+    };
+  }
+
+  const filmId = queryParamsNumbers(context.query.filmId);
+  const filmWithTags = await getFilmWithTagsById(filmId);
 
   const foundFilm = await getReducedFilmsWithTags(filmWithTags);
-  console.log(foundFilm);
 
   const currentFilmInCart = currentCart.find(
-    (film) => foundFilm.id === film.id,
+    (filmInCart: FilmInCart) => foundFilm.id === filmInCart.id,
   );
-
-  // if (!foundFilm) {
-  //   return {
-  //     film: null,
-  //   };
-  // }
 
   const superFilm = { ...foundFilm, ...currentFilmInCart };
 

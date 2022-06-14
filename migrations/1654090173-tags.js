@@ -1,16 +1,16 @@
 const allTags = [
-  { name: 'nature' },
-  { name: 'traveling' },
   { name: 'environment' },
-  { name: 'neonoir' },
-  { name: 'gangster' },
-  { name: 'godfather' },
-  { name: 'social' },
+  { name: 'water' },
+  { name: 'drones' },
+  { name: 'globalwarming' },
+  { name: 'dicaprio' },
+  { name: 'world' },
+  { name: 'seniors' },
+  { name: 'america' },
+  { name: 'lifestyle' },
+  { name: 'ocean' },
   { name: 'friendship' },
-  { name: 'family' },
-  { name: 'stevenking' },
-  { name: 'parody' },
-  { name: '50s' },
+  { name: 'diving' },
 ];
 
 exports.up = async (sql) => {

@@ -1,30 +1,34 @@
 const films = [
   {
     id: '1',
-    title: 'Unpredictable Nature',
+    title: 'River',
     genre: 'Docummentary',
-    synopsis: 'beautiful shots of America',
+    synopsis:
+      'A cinematic and musical odyssey that explores the remarkable relationship between humans and rivers.',
     price: '20',
   },
   {
     id: '2',
-    title: 'Leon 2: Secret son',
-    genre: 'Action',
-    synopsis: "Jean Reno's son has to avenge his father",
+    title: 'Before the Flood',
+    genre: 'Docummentary',
+    synopsis:
+      'A look at how climate change affects our environment and what society can do to prevent the demise of endangered species, ecosystems and native communities across the planet.',
     price: '30',
   },
   {
     id: '3',
-    title: 'Alice and Friends',
-    genre: 'Women Drama',
-    synopsis: 'Four women are discussing  various forms of marriage',
+    title: 'The Bubble',
+    genre: 'Docummentary',
+    synopsis:
+      "The Bubble examines often-surreal senior citizen life within The Villages, America''s largest retirement community. Retired life beneath the Floridian sunshine however, is not perhaps as idyllic, or as welcomed, as one may imagine.",
     price: '15',
   },
   {
     id: '4',
-    title: 'It 3: Game Over',
-    genre: 'Horror Parody',
-    synopsis: 'Parody of the famous horror adaptation',
+    title: 'My Octopus Teacher',
+    genre: 'Docummentary',
+    synopsis:
+      'A cinematic and musical odyssey that explores the remarkable relationship between humans and rivers.',
     price: '24',
   },
 ];

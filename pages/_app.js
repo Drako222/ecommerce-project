@@ -5,16 +5,15 @@ import { useEffect, useState } from 'react';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Layout from '../components/Layout';
+import { getParsedCookie } from '../util/cookies';
 
 function MyApp({ Component, pageProps }, props) {
-  // useEffect(() => {
-  //   const currentCart = Cookies.get('cart') ? getParsedCookie('cart') : [];
-  //   const finalQuantity =
-  //     typeof currentCart === undefined ? '' : getQuantity(currentCart);
-  //   setQuantity(finalQuantity);
-  // }, []);
+  const [cart, setCart] = useState([]);
 
-  // const [quantity, setQuantity] = useState('');
+  useEffect(() => {
+    const currentCart = Cookies.get('cart') ? getParsedCookie('cart') : [];
+    setCart(currentCart);
+  }, []);
 
   return (
     <>
@@ -23,19 +22,17 @@ function MyApp({ Component, pageProps }, props) {
           html,
           body {
             padding: 0;
-            background-color: #ededee;
-            font-family: Inter, -apple-system, BlinkMacSystemFont, Segoe UI,
-              Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans,
-              Helvetica Neue, sans-serif;
-            color: white;
-            background-color: black;
+            font-family: 'Open Sans', sans-serif;
+            background-color: #000c07;
+            color: #acdf87;
+            font-weight: 300;
           }
           * {
             box-sizing: border-box;
           }
 
           h1 {
-            margin: 40px auto 40px;
+            margin: 40px auto 70px;
             text-align: center;
           }
 
@@ -47,8 +44,8 @@ function MyApp({ Component, pageProps }, props) {
       />
 
       <Layout>
-        <Header length={props.length} />
-        <Component {...pageProps} />
+        <Header length={props.length} cart={cart} setCart={setCart} />
+        <Component {...pageProps} cart={cart} setCart={setCart} />
       </Layout>
       <Footer />
     </>

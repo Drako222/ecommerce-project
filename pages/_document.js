@@ -10,6 +10,12 @@ export default function Document() {
           type="text/css"
         />
         <link
+          href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@700&display=swap"
+          rel="stylesheet"
+          type="text/css"
+        />
+
+        <link
           href="https://fonts.googleapis.com/css2?family=Inter&display=optional"
           rel="stylesheet"
         />

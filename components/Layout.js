@@ -5,7 +5,7 @@ const layoutStyles = css`
   flex-direction: column;
   justify-content: center;
   align-items: space-between;
-  margin-top: 55px;
+  margin-top: 100px;
   margin-bottom: 60px;
 `;
 

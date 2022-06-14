@@ -1,5 +1,8 @@
 {
   "name": "ecommerce-project",
+  "cacheDirectories": [
+    ".next/cache"
+  ],
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -8,12 +11,13 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
+    "heroku-postbuild": "yarn migrate up && yarn build",
     "migrate": "dotenv ley"
   },
   "dependencies": {
     "@emotion/react": "^11.9.0",
-    "@playwright/test": "^1.22.2",
     "@reduxjs/toolkit": "^1.8.2",
+    "@types/dotenv-safe": "^8.1.2",
     "axios": "^0.27.2",
     "dotenv-cli": "^5.1.0",
     "dotenv-safe": "^8.2.0",
@@ -22,6 +26,8 @@
     "postgres": "^3.2.4",
     "react": "18.1.0",
     "react-dom": "18.1.0",
+    "react-hover-video-player": "^9.6.0",
+    "react-router-dom": "^6.3.0",
     "redux": "^4.2.0",
     "sharp": "^0.30.5"
   },
@@ -30,6 +36,7 @@
     "@babel/eslint-parser": "7.17.0",
     "@babel/preset-env": "^7.18.2",
     "@next/eslint-plugin-next": "12.1.6",
+    "@playwright/test": "^1.22.2",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
     "@types/jest": "^28.1.1",
