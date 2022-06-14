@@ -2,12 +2,10 @@ import { expect, test } from '@playwright/test';
 
 const baseUrl = 'http://localhost:3000/';
 
-test('navigation test', async ({ page }) => {
+test('checkout workflow', async ({ page }) => {
   // go to the website base URL
-
-  await page.fill('#name', 'Peter');
-
   await page.goto(baseUrl);
+
   await page.$$(`[data-test-id^="product-1"]`).click();
 
   await page.locator('text=Add').click();

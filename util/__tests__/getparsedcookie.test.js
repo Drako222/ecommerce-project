@@ -11,13 +11,13 @@ test('set. get amd delete cookie', () => {
     value: [{ genre: 'Women Drama', price: '15' }],
   };
 
-  expect(getParsedCookie(cookie.key).toBe(undefined));
+  expect(getParsedCookie(cookie.key)).toBe(undefined);
 
-  expect(() => setStringifiedCookie(cookie.title, cookie.value).not.toThrow());
+  expect(() => setStringifiedCookie(cookie.key, cookie.value)).not.toThrow();
 
   expect(getParsedCookie(cookie.key)).toStrictEqual(cookie.value);
 
   expect(deleteCookie(cookie.key)).toBe(undefined);
 
-  expect(getParsedCookie(cookie.key).toBe(undefined));
+  expect(getParsedCookie(cookie.key)).toBe(undefined);
 });

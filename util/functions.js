@@ -75,32 +75,3 @@ export function addingOrRemovingCookies(
     setStringifiedCookie('cart', newCart);
   }
 }
-
-export function test1AddingOrRemovingCookies(film) {
-  const currentCart = [
-    { id: 2, filmCounter: 3 },
-    { id: 4, filmCounter: 5 },
-    { id: 3, filmCounter: 4 },
-  ];
-
-  let newCart;
-  let inCart = false; //default value
-  let filmCounter = 1; //default value
-
-  if (currentCart.find((filmInCart) => film.id === filmInCart.id)) {
-    newCart = currentCart.filter((filmInCart) => filmInCart.id !== film.id);
-    inCart = false;
-    filmCounter = 1;
-  } else {
-    newCart = [
-      ...currentCart,
-      {
-        id: film.id,
-        filmCounter: filmCounter,
-      },
-    ];
-    inCart = true;
-  }
-
-  return newCart;
-}

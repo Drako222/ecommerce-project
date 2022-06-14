@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`reduces films with tags 1`] = `
+Object {
+  "genre": "Action",
+  "id": 2,
+  "price": "30",
+  "synopsis": "Jean Reno's son has to avenge his father",
+  "tags": Array [
+    Object {
+      "id": 4,
+      "name": "neonoir",
+    },
+    Object {
+      "id": 5,
+      "name": "gangster",
+    },
+  ],
+  "title": "Leon 2: Secret son",
+}
+`;

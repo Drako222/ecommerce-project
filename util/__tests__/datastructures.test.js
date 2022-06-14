@@ -1,4 +1,4 @@
-import { totalCounting } from '../functions.js';
+import { getReducedFilmsWithTags } from '../datastructures.js';
 
 test('reduces films with tags', () => {
   const cookie = [

@@ -10,6 +10,11 @@ export default function Success() {
       <main>
         <h1>Thank you! 🙏</h1>
         <h2>Enjoy watching our films!</h2>
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
       </main>
     </>
   );

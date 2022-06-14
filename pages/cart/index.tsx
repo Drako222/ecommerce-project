@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import Cookies from 'js-cookie';
+import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -7,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { getParsedCookie, setStringifiedCookie } from '../../util/cookies';
 import { getFilmsDatabase } from '../../util/filmsDatabase';
 import { getQuantity, totalCounting } from '../../util/functions';
+import { FilmInCart } from '../films/[filmId]';
 
 const cartStyles = css`
   margin: 0px auto 0px;
@@ -61,10 +63,21 @@ const cartStyles = css`
   }
 `;
 
-export default function Cart(props) {
+type Props2 = {
+  films: {
+    title: string | undefined;
+    price: string | number;
+    filmCounter: number;
+    id: string;
+  }[];
+  currentCart: FilmInCart[];
+  setCart: any;
+};
+
+export default function Cart(props: Props2) {
   const [cartList, setCartList] = useState(props.films || []);
 
-  const onClickDeleteButton = (id) => {
+  const onClickDeleteButton = (id: string | number) => {
     const cookieValue = [...props.currentCart];
     console.log(cookieValue);
     const newCookieValue = cookieValue.filter((p) => p.id !== id);
@@ -90,7 +103,12 @@ export default function Cart(props) {
             <button className="checkoutbutton">Checkout</button>
           </Link>
         ) : (
-          ''
+          <div>
+            <br />
+            <br />
+            <br />
+            <br />
+          </div>
         )}
         <ul>
           {cartList.map((film) => {
@@ -126,14 +144,14 @@ export default function Cart(props) {
   );
 }
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps(context: GetServerSidePropsContext) {
   const allFilms = await getFilmsDatabase();
 
   const cookie = context.req.cookies.cart;
   const currentCart = cookie ? JSON.parse(context.req.cookies.cart) : [];
 
-  const films = currentCart.map((p) => {
-    const cartObject = allFilms.find((prod) => prod.id === p.id);
+  const films = currentCart.map((p: FilmInCart) => {
+    const cartObject: any = allFilms.find((prod) => prod.id === p.id);
 
     return {
       id: cartObject.id,

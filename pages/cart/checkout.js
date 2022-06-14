@@ -118,12 +118,19 @@ export default function Checkout(props) {
     return filmPriceTotal;
   });
 
-  const handleSubmit = (e) => {
-    if (!alert) {
-      e.preventDefault();
-      deleteCookie('cart');
-      props.setCart([]);
-    }
+  // checking today's date
+  let date = new Date();
+  let day = date.getDate();
+  let month = date.getMonth() + 1;
+  let year = date.getFullYear();
+  if (month < 10) month = '0' + month;
+  if (day < 10) day = '0' + day;
+  let today = year + '-' + month + '-' + day;
+
+  //on delete cookie, only onSubmit
+  const handleSubmit = () => {
+    deleteCookie('cart');
+    props.setCart([]);
   };
 
   const sum = totalCounting.reduce((accumulator, a) => accumulator + a, 0);
@@ -139,7 +146,7 @@ export default function Checkout(props) {
       </Head>
       <main>
         <h1>Checkout♻️</h1>
-        <form css={formStyles} action="/cart/success">
+        <form css={formStyles} action="/cart/success" onSubmit={handleSubmit}>
           <div css={containerStyles}>
             <div className="row">
               <h3>Billing Address</h3>
@@ -154,6 +161,7 @@ export default function Checkout(props) {
                 name="firstname"
                 placeholder="John"
                 data-test-id="checkout-first-name"
+                pattern="[a-zA-Z]*"
                 required
               />
               <label for="surname">
@@ -163,6 +171,7 @@ export default function Checkout(props) {
                 minlength="1"
                 maxlength="40"
                 type="text"
+                pattern="[a-zA-Z]*"
                 htmlId="surname"
                 name="surname"
                 placeholder="Doe"
@@ -199,6 +208,7 @@ export default function Checkout(props) {
               <input
                 type="text"
                 minlength="1"
+                pattern="[a-zA-Z]*"
                 maxlength="20"
                 htmlId="city"
                 name="city"
@@ -208,9 +218,10 @@ export default function Checkout(props) {
               />
               <label for="ZIP">ZIP code</label>
               <input
-                type="number"
+                type="tel"
                 minlength="4"
                 maxlength="10"
+                pattern="[0-9]+"
                 htmlId="ZIP"
                 name="ZIP"
                 placeholder="68021"
@@ -557,14 +568,16 @@ export default function Checkout(props) {
                 type="date"
                 htmlId="expmonth"
                 name="expmonth"
+                min={today}
                 placeholder="YYYY-MM-DD"
                 data-test-id="checkout-expiration-date"
                 required
               />
               <label for="cvv">CVV</label>
               <input
-                type="number"
+                type="tel"
                 htmlId="cvv"
+                pattern="[0-9\s]{3,3}"
                 name="cvv"
                 maxlength="3"
                 placeholder="352"

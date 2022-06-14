@@ -132,7 +132,7 @@ export type Props = {
     filmCounter: number | undefined;
     id: string;
   };
-  cart: any;
+  cart: FilmInCart[];
   setCart: any;
 };
 export type FilmfromDatabase = {
@@ -293,6 +293,7 @@ export default function Film(props: Props) {
                   ];
                   setStringifiedCookie('cart', newCart);
                   props.setCart(newCart);
+                  console.log(filteredCart);
                 }
               }}
             >
