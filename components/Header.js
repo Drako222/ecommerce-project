@@ -120,7 +120,7 @@ export default function Header(props) {
             </Link>
           </div>
           <div className="cart">
-            <Link href="/cart" htmlId="cart">
+            <Link href="/cart" id="cart">
               <Image
                 className="shoppingcart"
                 src="/shoppingcart.jpg"

@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import Head from 'next/head';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { deleteCookie } from '../../util/cookies';
 import { getFilmsDatabase } from '../../util/filmsDatabase';
@@ -111,6 +112,8 @@ const buttonStyles = css`
 `;
 
 export default function Checkout(props) {
+  const router = useRouter();
+
   const totalCounting = props.films.map((film) => {
     const filmPrice = Number(film.price);
     const filmCounter = Number(film.filmCounter);
@@ -128,9 +131,11 @@ export default function Checkout(props) {
   let today = year + '-' + month + '-' + day;
 
   //on delete cookie, only onSubmit
-  const handleSubmit = () => {
+  const handleSubmit = (event) => {
     deleteCookie('cart');
     props.setCart([]);
+    event.preventDefault();
+    router.push('success/');
   };
 
   const sum = totalCounting.reduce((accumulator, a) => accumulator + a, 0);
@@ -146,7 +151,7 @@ export default function Checkout(props) {
       </Head>
       <main>
         <h1>Checkout♻️</h1>
-        <form css={formStyles} action="/cart/success" onSubmit={handleSubmit}>
+        <form css={formStyles} onSubmit={(event) => handleSubmit(event)}>
           <div css={containerStyles}>
             <div className="row">
               <h3>Billing Address</h3>
@@ -155,7 +160,7 @@ export default function Checkout(props) {
               </label>
               <input
                 type="text"
-                htmlId="firstname"
+                id="firstname"
                 minlength="1"
                 maxlength="40"
                 name="firstname"
@@ -172,7 +177,7 @@ export default function Checkout(props) {
                 maxlength="40"
                 type="text"
                 pattern="[a-zA-Z]*"
-                htmlId="surname"
+                id="surname"
                 name="surname"
                 placeholder="Doe"
                 data-test-id="checkout-last-name"
@@ -183,7 +188,7 @@ export default function Checkout(props) {
               </label>
               <input
                 type="email"
-                htmlId="email"
+                id="email"
                 name="email"
                 placeholder="john@example.com"
                 data-test-id="checkout-email"
@@ -194,7 +199,7 @@ export default function Checkout(props) {
               </label>
               <input
                 type="text"
-                htmlId="adr"
+                id="adr"
                 minlength="3"
                 maxlength="40"
                 name="address"
@@ -210,7 +215,7 @@ export default function Checkout(props) {
                 minlength="1"
                 pattern="[a-zA-Z]*"
                 maxlength="20"
-                htmlId="city"
+                id="city"
                 name="city"
                 placeholder="New York"
                 data-test-id="checkout-city"
@@ -222,7 +227,7 @@ export default function Checkout(props) {
                 minlength="4"
                 maxlength="10"
                 pattern="[0-9]+"
-                htmlId="ZIP"
+                id="ZIP"
                 name="ZIP"
                 placeholder="68021"
                 data-test-id="checkout-postal-code"
@@ -232,7 +237,7 @@ export default function Checkout(props) {
                 <i class="fa fa-country"></i>Country
               </label>
               <select
-                htmlId="country"
+                id="country"
                 name="country"
                 class="form-control"
                 required
@@ -552,7 +557,7 @@ export default function Checkout(props) {
               <h3>Payment</h3>
               <label for="ccnum">Credit card number</label>
               <input
-                htmlId="ccnum"
+                id="ccnum"
                 type="tel"
                 inputmode="numeric"
                 pattern="[0-9\s]{13,19}"
@@ -566,7 +571,7 @@ export default function Checkout(props) {
               <label for="expmonth">Exp Month</label>
               <input
                 type="date"
-                htmlId="expmonth"
+                id="expmonth"
                 name="expmonth"
                 min={today}
                 placeholder="YYYY-MM-DD"
@@ -576,7 +581,7 @@ export default function Checkout(props) {
               <label for="cvv">CVV</label>
               <input
                 type="tel"
-                htmlId="cvv"
+                id="cvv"
                 pattern="[0-9\s]{3,3}"
                 name="cvv"
                 maxlength="3"
@@ -606,7 +611,6 @@ export default function Checkout(props) {
             type="submit"
             data-test-id="checkout-confirm-order"
             css={buttonStyles}
-            onClick={(e) => handleSubmit(e)}
           >
             Confirm order
           </button>
