@@ -12,20 +12,20 @@ test('adding and removing item to cart', async ({ page }) => {
 
   // adding item into cart
   await page.locator('[data-test-id="product-add-to-cart"]').click();
-  /* const quantity = await page.inputValue('[data-test-id="product-quantity"]');
-  await expect(String(quantity)).toHaveText('1');
+  const quantity = await page.locator('[data-test-id="product-quantity"]');
+  await expect(quantity).toHaveValue('1');
+  // expect(queryByTestId('value')).toHaveValue('foo')
 
   // editing the quantity
   await page.locator('text=+').click();
-  await expect(page.locator(quantity).innerText().includes('2')).toBeTruthy();
-
+  await expect(quantity).toHaveValue('2');
   await page.locator('text=-').click();
-  await expect(page.locator(quantity).innerText().includes('1')).toBeTruthy(); */
+  await expect(quantity).toHaveValue('1');
 
   //going to cart and checking it contains 'River'
   await page.locator('img[alt="cart"]').click();
   await expect(page).toHaveTitle('Your shopping cart');
-  await page.locator('text=River').click();
+  await page.locator('text=River');
 
   //removing the film and checking that the cart is empty
   await page.locator('button', { hasText: 'Remove' }).click();
