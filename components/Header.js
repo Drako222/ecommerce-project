@@ -102,23 +102,25 @@ export default function Header(props) {
         <div className="centernav">
           <Link href="/about">About</Link>
           <div className="films">
-            <Link href="/" data-test-id="products-link">
-              Films
+            <Link href="/">
+              <a data-test-id="products-link">Films</a>
             </Link>
           </div>
           <div className="cart">
             <Link href="/cart" id="cart">
-              <Image
-                className="shoppingcart"
-                src="/shoppingcart.jpg"
-                alt="cart"
-                height="35px"
-                width="40px"
-              />
+              <div div data-test-id="cart-link">
+                <Image
+                  className="shoppingcart"
+                  src="/shoppingcart.jpg"
+                  alt="cart"
+                  height="35px"
+                  width="40px"
+                />
+                <a className="cartQuantity" data-test-id="cart-count">
+                  {cartQuatity || ''}
+                </a>
+              </div>
             </Link>
-            <div className="cartQuantity" data-test-id="cart-count">
-              {cartQuatity || ''}
-            </div>
           </div>
         </div>
       </div>
