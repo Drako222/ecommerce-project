@@ -19,7 +19,7 @@ Earthflix is the only VOD platform fighting global warming. We engage people to 
 
 # Screenshot
 
-![screenshot1]('Screenshot 2022-06-19 at 17.38.05.png')
+![screenshot1](https://github.com/Drako222/ecommerce-project/blob/main/public/Screenshot%202022-06-19%20at%2017.38.05.png)
 
 # Deployment instructions
 
