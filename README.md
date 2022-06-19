@@ -9,36 +9,47 @@ Earthflix is the only VOD platform fighting global warming. We engage people to 
 # List of technologies used
 
 - Next.js
-- Postgres.js
-- Jest
+- Postgres
+- Jest unit tests
 - Playwright
+- Emotion
+- React
 - GitHub Actions
 - Typescript
 
-# Screenshots
+# Screenshot
 
-
-# Setup instructions
-
-Copy the `.env.example` file to a new file called `.env` (ignored from Git) and fill in the necessary information.
-
-Follow the instructions from the PostgreSQL step in [UpLeveled's System Setup Instructions](https://github.com/upleveled/system-setup/blob/master/readme.md).
-
-Then, connect to the built-in `postgres` database as administrator in order to create the database:
-
-### Running the migrations
-
-To set up the structure and the content of the database, run the migrations using Ley:
-
-```bash
-yarn migrate up
-```
-
-To reverse the last single migration, run:
-
-```bash
-yarn migrate down
-```
-
+![screenshot1](Screenshot 2022-06-19 at 17.38.05.png)
 
 # Deployment instructions
+
+# Functionalities
+- A landing page
+- A products page where all the products are listed
+- A page for each single product with the ability to change the amount.
+- A shopping cart page with a list of all products. The ability to change the amount, delete one product. It shows the total price.
+- A checkout page which shows the items from the shopping cart, shipping and payment information
+- A thank you page after a checkout.
+- The header will show a shopping cart with the current number of items on all pages
+
+# Setup instructions
+Clone the repository with git clone <repo>
+Setup the database by downloading and installing PostgreSQL
+Create a user and a database
+Create a new file .env
+Copy the environment variables from .env-example into .env
+Replace the placeholders xxxxx with your username, password and name of database
+Install dotenv-cli with yarn add dotenv-cli
+Run yarn install in your command line
+Run the migrations with yarn migrate up
+Start the server by running yarn dev
+
+# Deploy on Heroku
+Sign up at Heroku: https://www.heroku.com/.
+Create a new App
+Choose a name and select the "Europe" Region
+Click "Connect to GitHub"
+Search for your repository and click on "Connect". Click on "Enable Automatic Deploys"
+Go to the Overview tab and click "Configure Add-On"
+Search for "Postgres" and select "Heroku Postgres"
+Trigger a deploy by pushing your repo to GitHub
