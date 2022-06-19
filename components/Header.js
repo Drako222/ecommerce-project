@@ -83,7 +83,7 @@ const headerStyles = css`
 `;
 
 export default function Header(props) {
-  const cartQuatity = getQuantity(props.cart);
+  const cartQuantity = getQuantity(props.cart);
 
   return (
     <header css={headerStyles}>
@@ -100,7 +100,7 @@ export default function Header(props) {
       </div>
       <div>
         <div className="centernav">
-          <Link href="/about">About</Link>
+          <Link href="/">About</Link>
           <div className="films">
             <Link href="/">
               <a data-test-id="products-link">Films</a>
@@ -108,7 +108,7 @@ export default function Header(props) {
           </div>
           <div className="cart">
             <Link href="/cart" id="cart">
-              <div div data-test-id="cart-link">
+              <div data-test-id="cart-link">
                 <Image
                   className="shoppingcart"
                   src="/shoppingcart.jpg"
@@ -117,7 +117,7 @@ export default function Header(props) {
                   width="40px"
                 />
                 <a className="cartQuantity" data-test-id="cart-count">
-                  {cartQuatity || ''}
+                  {cartQuantity || ''}
                 </a>
               </div>
             </Link>
