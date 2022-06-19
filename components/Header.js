@@ -18,71 +18,58 @@ const headerStyles = css`
   width: 100%;
   height: 80px;
   border-bottom: 3px solid #a4de02;
-
   .mainlogo {
     cursor: pointer;
     align-self: center;
     transition: all 0.4s ease-in-out;
-
     :hover {
       filter: brightness(200%);
       box-shadow: -20px 0 black, 0 20px black, 20px 0 black, 0 -20px black;
     }
   }
-
   .mainlogo {
     cursor: pointer;
     align-self: center;
     transition: all 0.4s ease-in-out;
-
     :hover {
       filter: brightness(20%);
     }
   }
-
   a {
     color: #000c07;
     transition: all 0.4s ease-in-out;
-
     :hover {
       color: #a4de02;
     }
   }
-
   .centernav {
     display: flex;
     justify-content: flex-end;
     align-self: center;
     gap: 10px;
     font-size: 1.4rem;
-
     a + a {
       margin-left: 20px;
     }
   }
-
   .films {
     padding-right: 10px;
     padding-left: 16px;
     color: black;
   }
-
   .cart {
     display: flex;
     justify-content: center;
   }
-
   .shoppingcart {
     cursor: pointer;
     align-self: center;
     padding-left: 20px;
     transition: all 0.4s ease-in-out;
-
     :hover {
       filter: brightness(160%);
     }
   }
-
   .cartQuantity {
     align-self: flex-end;
     font-size: small;
