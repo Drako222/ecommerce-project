@@ -95,7 +95,7 @@ export default function Header(props) {
             width="210px"
             height="50px"
             alt="earthlix logo"
-          ></Image>
+          />
         </Link>
       </div>
       <div>

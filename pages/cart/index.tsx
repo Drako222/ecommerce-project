@@ -1,3 +1,5 @@
+/** @jsxImportSource @emotion/react */
+
 import { css } from '@emotion/react';
 import Cookies from 'js-cookie';
 import { GetServerSidePropsContext } from 'next';
@@ -13,15 +15,12 @@ import { FilmInCart } from '../films/[filmId]';
 const cartStyles = css`
   margin: 0px auto 0px;
   text-align: center;
-
   h1 {
     margin-bottom: 0px;
   }
-
   .totalprice {
     text-align: left;
   }
-
   ul {
     list-style: none;
     padding-inline-start: 0px;
@@ -29,13 +28,11 @@ const cartStyles = css`
     justify-content: center;
     gap: 50px;
   }
-
   .checkoutbutton {
     font-size: 20px;
     line-height: 30px;
     margin-bottom: 20px;
   }
-
   button {
     cursor: pointer;
     border-radius: 20px;
@@ -54,7 +51,6 @@ const cartStyles = css`
     -ms-transition: all 0.4s ease-in-out;
     -o-transition: all 0.4s ease-in-out;
     transition: all 0.4s ease-in-out;
-
     :hover {
       border: solid 3px white;
       background: #a4de02;
