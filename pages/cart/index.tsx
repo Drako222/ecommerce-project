@@ -1,15 +1,14 @@
 /** @jsxImportSource @emotion/react */
 
 import { css } from '@emotion/react';
-import Cookies from 'js-cookie';
 import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { getParsedCookie, setStringifiedCookie } from '../../util/cookies';
+import { useState } from 'react';
+import { setStringifiedCookie } from '../../util/cookies';
 import { getFilmsDatabase } from '../../util/filmsDatabase';
-import { getQuantity, totalCounting } from '../../util/functions';
+import { totalCounting } from '../../util/functions';
 import { FilmInCart } from '../films/[filmId]';
 
 const cartStyles = css`
@@ -71,13 +70,12 @@ type Props2 = {
 };
 
 export default function Cart(props: Props2) {
-  const [cartList, setCartList] = useState(props.films || []);
+  const [cartList, setCartList] = useState(props.films);
 
   const onClickDeleteButton = (id: string | number) => {
     const cookieValue = [...props.currentCart];
     console.log(cookieValue);
-    const newCookieValue = cookieValue.filter((p) => p.id !== id);
-    const newInCart = cartList.filter((item) => item.id !== id);
+    const newInCart = cartList.filter((item: any) => item.id !== id);
     setStringifiedCookie('cart', newInCart);
     setCartList([...newInCart]);
     props.setCart(newInCart);
@@ -107,7 +105,7 @@ export default function Cart(props: Props2) {
           </div>
         )}
         <ul>
-          {cartList.map((film) => {
+          {cartList.map((film: any) => {
             return (
               <li
                 key={`film.id-${film.id}`}

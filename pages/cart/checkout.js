@@ -1,8 +1,6 @@
 import { css } from '@emotion/react';
 import Head from 'next/head';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Route, Routes, useNavigate } from 'react-router-dom';
 import { deleteCookie } from '../../util/cookies';
 import { getFilmsDatabase } from '../../util/filmsDatabase';
 
@@ -122,20 +120,20 @@ export default function Checkout(props) {
   });
 
   // checking today's date
-  let date = new Date();
+  const date = new Date();
   let day = date.getDate();
   let month = date.getMonth() + 1;
-  let year = date.getFullYear();
+  const year = date.getFullYear();
   if (month < 10) month = '0' + month;
   if (day < 10) day = '0' + day;
-  let today = year + '-' + month + '-' + day;
+  const today = year + '-' + month + '-' + day;
 
-  //on delete cookie, only onSubmit
-  const handleSubmit = (event) => {
+  // on delete cookie, only onSubmit
+  const handleSubmit = async (event) => {
     deleteCookie('cart');
     props.setCart([]);
     event.preventDefault();
-    router.push('success/');
+    await router.push('success/');
   };
 
   const sum = totalCounting.reduce((accumulator, a) => accumulator + a, 0);
@@ -155,27 +153,25 @@ export default function Checkout(props) {
           <div css={containerStyles}>
             <div className="row">
               <h3>Billing Address</h3>
-              <label for="firstname">
-                <i class="fa fa-user"></i> First Name
+              <label htmlFor="firstname">
+         First Name
               </label>
               <input
-                type="text"
                 id="firstname"
-                minlength="1"
-                maxlength="40"
+                minLength="1"
+                maxLength="40"
                 name="firstname"
                 placeholder="John"
                 data-test-id="checkout-first-name"
                 pattern="[a-zA-Z]*"
                 required
               />
-              <label for="surname">
-                <i class="fa fa-user"></i> Last Name
+              <label htmlFor="surname">
+             Last Name
               </label>
               <input
-                minlength="1"
-                maxlength="40"
-                type="text"
+                minLength="1"
+                maxLength="40"
                 pattern="[a-zA-Z]*"
                 id="surname"
                 name="surname"
@@ -183,8 +179,8 @@ export default function Checkout(props) {
                 data-test-id="checkout-last-name"
                 required
               />
-              <label for="email">
-                <i class="fa fa-envelope"></i> Email
+              <label htmlFor="email">
+                Email
               </label>
               <input
                 type="email"
@@ -194,38 +190,36 @@ export default function Checkout(props) {
                 data-test-id="checkout-email"
                 required
               />
-              <label for="adr">
-                <i class="fa fa-address-card-o"></i> Address
+              <label htmlFor="adr">
+       Address
               </label>
               <input
-                type="text"
                 id="adr"
-                minlength="3"
-                maxlength="40"
+                minLength="3"
+                maxLength="40"
                 name="address"
                 placeholder="542 W. 15th Street"
                 data-test-id="checkout-address"
                 required
               />
-              <label for="city">
-                <i class="fa fa-institution"></i> City
+              <label htmlFor="city">
+               City
               </label>
               <input
-                type="text"
-                minlength="1"
+                minLength="1"
                 pattern="[a-zA-Z]*"
-                maxlength="20"
+                maxLength="20"
                 id="city"
                 name="city"
                 placeholder="New York"
                 data-test-id="checkout-city"
                 required
               />
-              <label for="ZIP">ZIP code</label>
+              <label htmlFor="ZIP">ZIP code</label>
               <input
                 type="tel"
-                minlength="4"
-                maxlength="10"
+                minLength="4"
+                maxLength="10"
                 pattern="[0-9]+"
                 id="ZIP"
                 name="ZIP"
@@ -233,13 +227,13 @@ export default function Checkout(props) {
                 data-test-id="checkout-postal-code"
                 required
               />
-              <label for="country">
-                <i class="fa fa-country"></i>Country
+              <label htmlFor="country">
+                Country
               </label>
               <select
                 id="country"
                 name="country"
-                class="form-control"
+                className="form-control"
                 required
                 data-test-id="checkout-country"
               >
@@ -555,20 +549,20 @@ export default function Checkout(props) {
             </div>
             <div className="row">
               <h3>Payment</h3>
-              <label for="ccnum">Credit card number</label>
+              <label htmlFor="ccnum">Credit card number</label>
               <input
                 id="ccnum"
                 type="tel"
-                inputmode="numeric"
+                inputMode="numeric"
                 pattern="[0-9\s]{13,19}"
-                autocomplete="cc-number"
+                autoComplete="cc-number"
                 name="cardnumber"
                 placeholder="1111-2222-3333-4444"
-                maxlength="19"
+                maxLength="19"
                 data-test-id="checkout-credit-card"
                 required
               />
-              <label for="expmonth">Exp Month</label>
+              <label htmlFor="expmonth">Exp Month</label>
               <input
                 type="date"
                 id="expmonth"
@@ -578,13 +572,13 @@ export default function Checkout(props) {
                 data-test-id="checkout-expiration-date"
                 required
               />
-              <label for="cvv">CVV</label>
+              <label htmlFor="cvv">CVV</label>
               <input
                 type="tel"
                 id="cvv"
                 pattern="[0-9\s]{3,3}"
                 name="cvv"
-                maxlength="3"
+                maxLength="3"
                 placeholder="352"
                 data-test-id="checkout-security-code"
                 required
@@ -608,7 +602,6 @@ export default function Checkout(props) {
           <button
             className="button"
             href="success"
-            type="submit"
             data-test-id="checkout-confirm-order"
             css={buttonStyles}
           >
@@ -626,7 +619,7 @@ export async function getServerSideProps(context) {
   const cookie = context.req.cookies.cart;
   const currentCart = cookie ? JSON.parse(context.req.cookies.cart) : '[]';
 
-  var res = allFilms.filter((n) => currentCart.some((n2) => n.id == n2.id));
+  // let res = allFilms.filter((n) => currentCart.some((n2) => n.id === n2.id));
 
   const films = currentCart.map((p) => {
     const cartObject = allFilms.find((prod) => prod.id === p.id);
