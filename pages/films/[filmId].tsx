@@ -2,7 +2,7 @@
 
 import { css } from '@emotion/react';
 import Cookies from 'js-cookie';
-import { GetServerSideProps, GetServerSidePropsContext } from 'next';
+import { GetServerSidePropsContext } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useState } from 'react';
@@ -10,7 +10,6 @@ import HoverVideoPlayer from 'react-hover-video-player';
 import { getParsedCookie, setStringifiedCookie } from '../../util/cookies';
 import { getReducedFilmsWithTags } from '../../util/datastructures';
 import { getFilmWithTagsById } from '../../util/filmsDatabase';
-import { addingOrRemovingCookies } from '../../util/functions';
 import { queryParamsNumbers } from '../../util/queryParams';
 
 const filmPageStyles = css`
@@ -134,7 +133,6 @@ export type Props = {
     filmCounter: number | undefined;
     id: string;
   };
-  cart: FilmInCart[];
   setCart: any;
 };
 export type FilmfromDatabase = {
@@ -237,7 +235,7 @@ export default function Film(props: Props) {
                     ? getParsedCookie('cart')
                     : [];
 
-                  let filteredCart = currentCart.filter(
+                  const filteredCart = currentCart.filter(
                     (filmInCart: FilmInCart) => filmInCart.id !== props.film.id,
                   );
 
@@ -282,7 +280,7 @@ export default function Film(props: Props) {
 
                   const addition = filmCounter + 1;
 
-                  let filteredCart = currentCart.filter(
+                  const filteredCart = currentCart.filter(
                     (filmInCart: FilmInCart) => filmInCart.id !== props.film.id,
                   );
 

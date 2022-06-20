@@ -1,10 +1,6 @@
 import { css } from '@emotion/react';
-import Cookies from 'js-cookie';
-import { GetServerSidePropsContext } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { getParsedCookie } from '../util/cookies';
 import { getQuantity } from '../util/functions';
 
 const headerStyles = css`
