@@ -85,11 +85,11 @@ export default function Films(props) {
         <div css={filmsListStyles}>
           {props.films.map((film) => {
             return (
-              <Link
-                href={`/films/${film.id}`}
-                data-test-id={`product-${film.id}`}
-              >
-                <div key={`film id-${film.id}`} css={filmsListItemStyles}>
+              <div key={`film id-${film.id}`} css={filmsListItemStyles}>
+                <Link
+                  href={`/films/${film.id}`}
+                  data-test-id={`product-${film.id}`}
+                >
                   <div>
                     <div className="imagecontainer">
                       <Image
@@ -101,8 +101,8 @@ export default function Films(props) {
                       />
                     </div>
                   </div>
-                </div>
-              </Link>
+                </Link>
+              </div>
             );
           })}
         </div>
