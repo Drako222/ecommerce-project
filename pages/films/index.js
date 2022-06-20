@@ -1,5 +1,3 @@
-/** @jsxImportSource @emotion/react */
-
 import { css } from '@emotion/react';
 import Head from 'next/head';
 import Image from 'next/image';
@@ -87,11 +85,11 @@ export default function Films(props) {
         <div css={filmsListStyles}>
           {props.films.map((film) => {
             return (
+              <div key={`film id-${film.id}`} css={filmsListItemStyles}>
               <Link
                 href={`/films/${film.id}`}
                 data-test-id={`product-${film.id}`}
               >
-                <div key={`film id-${film.id}`} css={filmsListItemStyles}>
                   <div>
                     <div className="imagecontainer">
                       <Image
@@ -103,8 +101,8 @@ export default function Films(props) {
                       />
                     </div>
                   </div>
-                </div>
               </Link>
+              </div>
             );
           })}
         </div>

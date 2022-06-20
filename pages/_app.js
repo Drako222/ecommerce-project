@@ -53,17 +53,3 @@ function MyApp({ Component, pageProps }, props) {
 }
 
 export default MyApp;
-
-export function getServerSideProps(context) {
-  const currentCart = JSON.parse(context.req.cookies.cart || '[]');
-
-  const length = currentCart.length;
-
-  const superFilm = { ...foundFilm, ...currentFilmInCart };
-
-  return {
-    props: {
-      length,
-    },
-  };
-}
